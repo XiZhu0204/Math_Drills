@@ -193,6 +193,21 @@ body {
     text-align: center;
 }
 
+#restart:link, #restart:visited {
+    font-size: 12px;
+    color: #141414;
+    text-align: center;
+    text-decoration: none;
+    padding: 8px 10px;
+    margin: 0px 200px;
+    border: 1px solid #7bbafa;
+    border-radius: 25px;
+}
+
+#restart:hover {
+    background-color: #7bbafa;
+}
+
 #error_prompt {
     background-color: #ff6767;
     color: #ffffff;
