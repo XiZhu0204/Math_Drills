@@ -67,6 +67,7 @@ let questions_amount = 0;
 let questions = [];
 let questions_index = 0;
 let current_question = "";
+let questions_start_time = 0;
 
 document.getElementById('answer_box').addEventListener('keyup', async ({key}) => {
     if (key === "Enter") {
@@ -81,7 +82,8 @@ document.getElementById('answer_box').addEventListener('keyup', async ({key}) =>
                 }
                 current_question = Object.keys(questions[questions_index])[0];
                 document.getElementById('prompt').innerHTML = current_question;
-                // chnage error prompt now that a valid question number has been accepted
+                questions_start_time = performance.now();
+                // change error prompt now that a valid question number has been accepted
                 document.getElementById('error_prompt').innerHTML = "Please enter a valid number."
             } else {
                 document.getElementById('error_prompt').hidden = false;
@@ -111,9 +113,7 @@ document.getElementById('answer_box').addEventListener('keyup', async ({key}) =>
                 document.getElementById('error_prompt').hidden = true;
             }
             if (questions_index === questions_amount) {
-                document.getElementById('prompt').innerHTML = "Finished!";
-                document.getElementById('answer_box').hidden = true;
-                document.getElementById('submit_hint').hidden = true;
+                end();
                 return
             }
         }
@@ -121,3 +121,12 @@ document.getElementById('answer_box').addEventListener('keyup', async ({key}) =>
     }
 })
 
+function end() {
+    let questions_end_time = performance.now();
+    // compute the average time spent in seconds, then multiply by 100, round and divide by 100 to return result with 2 decimal places
+    let average_time_per_question = Math.round((questions_end_time - questions_start_time)/(1000*questions_amount)*100)/100;
+    document.getElementById('prompt').innerHTML = "Finished!";
+    document.getElementById('answer_box').hidden = true;
+    document.getElementById('submit_hint').innerHTML = `An average ${average_time_per_question} seconds was spent on each question.`;
+    document.getElementById('restart').hidden = false;
+}
