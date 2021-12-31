@@ -18,12 +18,16 @@ router.get('/', (req, res) => {
 
 // get user by name
 router.get('/:name', (req, res) => {
-    user_performance.find({name: `${req.params.name}`}, (err, result) => {
+    user_performance.find({user_name: `${req.params.name}`}, (err, result) => {
         if (err) {
             res.status(500).json({'Error': err});
         }
-        // access the array item instead of sending the one entry array
-        res.status(200).json(result[0]);
+        if (result.length === 0) {
+            res.status(404).json({'Error': "User not found."});
+        } else {
+            // access the array item instead of sending the one entry array
+            res.status(200).json(result[0]);
+        }
     });
 });
 
@@ -43,7 +47,7 @@ router.post('/', (req, res) => {
 
 // delete user by name
 router.delete('/:name', (req, res) => {
-    user_performance.deleteOne({name: `${req.params.name}`}, (err, result) => {
+    user_performance.deleteOne({user_name: `${req.params.name}`}, (err, result) => {
         if (err) {
             res.status(500).json({'Error': err});
         }
