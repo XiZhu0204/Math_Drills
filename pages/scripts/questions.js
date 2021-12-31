@@ -42,10 +42,11 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
 
                 // get user name from drop down
                 user_name = document.getElementById('user_select').value;
-                // hide the user select elements
+                // hide the user elements
                 document.getElementById('user_select_prompt').hidden = true;
                 document.getElementById('user_select').hidden = true;
                 document.getElementById('add_user').hidden = true;
+                document.getElementById('view_stats').hidden = true;
                 document.getElementById('user_in').hidden = true;
 
                 questions_start_time = performance.now();
@@ -84,9 +85,13 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
     }
 });
 
+async function delay(time) {
+    await new Promise(res => setTimeout(res, time));
+}
+
 async function show_ele(show_time, ele_name) {
     document.getElementById(`${ele_name}`).hidden = false;
-    await new Promise(res => setTimeout(res, show_time));
+    await delay(show_time)
     document.getElementById(`${ele_name}`).hidden = true;
 }
 
@@ -102,6 +107,8 @@ function end() {
         return;
     }
 
+    // unhide view stats if user is selected
+    document.getElementById('view_stats').hidden = false;
     fetch('/api/performance', {
         method: 'POST',
         headers: {
@@ -115,7 +122,7 @@ function end() {
                 if (data.length === 0) {
                     previous_performance_text.hidden = false;
                 } else {
-                    previous_performance_text.innerHTML = `These are previous ${data.length} average times with these types of questions:`;
+                    previous_performance_text.innerHTML = `These are the average times for the previous ${data.length} attempts at this question type:`;
                     previous_performance_text.hidden = false;
                     let performance_list = document.getElementById('performance_list');
                     for (let i = 0; i < data.length; i++) {
