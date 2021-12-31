@@ -1,6 +1,4 @@
-const question_select = document.getElementById("questions_type");
-
-question_select.addEventListener("change", () => {
+function get_question_type() {
     let selected_value = document.getElementById("questions_type").value;
     switch (selected_value) {
         case "Addition/Subtraction of Integers":
@@ -31,4 +29,7 @@ question_select.addEventListener("change", () => {
             localStorage.setItem("question_type", "rational_div");
             break
     }
-})
+    if (selected_value !== 'none'){
+        window.location.replace("/questions");
+    }
+}
