@@ -195,6 +195,7 @@ body {
 }
 
 .questions_main_content p {
+    margin: 10px 0px;
     font-size: 16px;
     color: #333333;
     text-align: center;
@@ -282,15 +283,35 @@ body {
 /* End question page css */
 
 /* Stats page css */
-.user_name_container {
+.stats_top_container {
     height: 90px;
     position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+}
+
+.user_name_container {
+    margin: 5px 100px;
+}
+
+#home_button {
+    font-size: 24px;
+    color: #141414;
+    text-align: center;
+    padding: 5px 8px;
+    margin: 5px 100px;
+    border: 1px solid #7bbafa;
+    text-decoration: none;
+    border-radius: 25px;
+}
+
+#home_button:hover {
+    background-color: #7bbafa;
+    cursor: pointer;
 }
 
 .user_name_container h1 {

@@ -33,7 +33,7 @@ function present_stats() {
                     average_times.forEach((time) => {
                         let item = document.createElement('li');
                         item.className = 'stats_item';
-                        item.appendChild(document.createTextNode(`${time} seconds`));
+                        item.appendChild(document.createTextNode(`${time} seconds per question`));
                         times_list.appendChild(item);
                     });
                     stat_div.appendChild(stat_intro);
