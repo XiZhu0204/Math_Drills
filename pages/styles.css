@@ -71,7 +71,28 @@ body {
 }
 /* end Navbar css */
 
-/* General main */
+/* General css */
+.drop_down {
+    padding: 8px 10px;
+    color: #333333;
+    background-color: #eeeeee;
+    border: 1px solid #dddddd;
+    cursor: pointer;
+    border-radius: 8px;
+    font: inherit
+}
+
+.drop_down:focus, .drop_down:hover {
+    outline: none;
+    border: 1px solid #cccccc;
+} 
+
+.drop_down option {
+    background: #ffffff;
+}
+/* End general css */
+
+/* Main page css */
 .main {
     background-image: #ffffff;
     position: absolute;
@@ -87,9 +108,7 @@ body {
     justify-content: center;
     height: 70%
 }
-/* End general main */
 
-/* Main page css */
 .main_page_content {
     display: grid;
 }
@@ -100,38 +119,23 @@ body {
     padding: 8px 10px;
 }
 
-#begin:link, #begin:visited {
+#begin {
     font-size: 32px;
     color: #141414;
     text-align: center;
-    text-decoration: none;
     padding: 16px 20px;
+    background-color: #ffffff;
     border: 1px solid #7bbafa;
     border-radius: 25px;
 }
 
 #begin:hover {
     background-color: #7bbafa;
+    cursor: pointer;
 }
 
 #questions_type {
-    padding: 8px 10px;
-    margin: 16px 0px;
-    color: #333333;
-    background-color: #eeeeee;
-    border: 1px solid #dddddd;
-    cursor: pointer;
-    border-radius: 8px;
-    font: inherit
-}
-
-#questions_type:focus, #questions_type:hover {
-    outline: none;
-    border: 1px solid #cccccc;
-} 
-
-#questions_type option {
-    background: #ffffff;
+    margin: 10px 0px;
 }
 /* End main page css */
 
@@ -165,7 +169,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 75%;
+    height: 80%;
 }
 
 .questions_main_content {
@@ -179,11 +183,14 @@ body {
     text-align: center;
 }
 
-#answer_box {
+.text_input {
     padding: 10px;
-    margin: 6px 0px;
     border: 1px solid #888888;
     border-radius: 15px;
+}
+
+#answer_box {
+    margin: 6px 0px;
     width: 100%;
 }
 
@@ -216,5 +223,114 @@ body {
     border: 2px solid #ff1b1b;
     border-radius: 8px;
 }
+
+#user_select {
+    margin: 10px 350px;
+}
+
+.user_interact_container{
+    display: flex;
+    justify-content: center;
+}
+
+.interact_user_buttons {
+    padding: 8px 10px;
+    margin: 5px 25px;
+    background-color: #ffffff;
+    border: 1px solid #7bbafa;
+    border-radius: 25px;
+}
+
+.interact_user_buttons:hover {
+    background-color: #7bbafa;
+    cursor: pointer;
+}
+
+#user_in {
+    margin: 10px 350px;
+}
+
+.user_prompt {
+    background-color: #ffffff;
+    padding: 8px 10px;
+    margin: 15px 200px;
+    border-radius: 8px;
+}
+
+#user_success_prompt {
+    border: 1px solid #a0fd49;
+}
+
+#user_error_prompt {
+    background-color: #ff6767;
+    color: #ffffff;
+    border: 1px solid #ff1b1b;
+}
+
+#performance_list {
+    margin: 10px 0px;
+    display: grid;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.performance_item {
+    font-size: 16px;
+    padding: 3px 0px;
+}
 /* End question page css */
 
+/* Stats page css */
+.user_name_container {
+    height: 90px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user_name_container h1 {
+    font-size: 36px;
+    color: #141414;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.stats_container {
+    position: absolute;
+    top: 90px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    vertical-align: top;
+    width: auto;
+    height: 100%;
+}
+
+.stats_container>* {
+    margin: 10px 0px;
+    flex-basis: 50%;
+    flex-grow: 1; 
+    box-sizing: border-box;
+}
+
+.stats_container>* p {
+    text-align: center;
+}
+
+#stats_list {
+    margin: 10px 0px;
+    display: grid;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.stats_item {
+    font-size: 16px;
+    padding: 3px 0px;
+}
+/* End stats page css */

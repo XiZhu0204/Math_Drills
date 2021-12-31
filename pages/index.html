@@ -16,10 +16,10 @@
                     <a href="/" class="navbar_links">Home</a>
                 </li>
                 <li class="navbar_item">
-                    <a href="about.html" class="navbar_links">About</a>
+                    <a href="/about" class="navbar_links">About</a>
                 </li>
                 <li class="navbar_item">
-                    <a href="contacts.html" class="navbar_links">Contacts</a>
+                    <a href="/contacts" class="navbar_links">Contacts</a>
                 </li>
             </ul>
         </div>
@@ -29,23 +29,23 @@
         <div class="main_container">
             <div class="main_page_content">
                 <h1>Select Questions Type</h1>
-                <a id="begin" href="questions.html">Begin</a>
-                <select name="questions_type" id="questions_type">
-                    <option selected disabled>Select Questions Type</option>
-                    <option value="Addition/Subtraction of Integers">Addition/Subtraction of Integers</option>
-                    <option value="Simple Addition/Subtraction">Simple Addition/Subtraction</option>
-                    <!-- <option value="Addition/Subtraction of Rationals">Addition/Subtraction of Rationals</option> -->
-                    <option value="Multiplication of Integers">Multiplication of Integers</option>
-                    <option value="Simple Multiplication">Simple Multiplication</option>
-                    <option value="Division of Integers">Division of Integers</option>
-                    <option value="Simple Division">Simple Division</option>
-                    <!-- <option value="Multiplication of Rationals">Multiplication of Rationals</option>
-                    <option value="Division of Rationals">Division of Rationals</option> -->
+                <button id="begin" onclick="get_question_type()">Begin</button>
+                <select name="questions_type" class="drop_down" id="questions_type">
+                    <option selected disabled value="none">Select Questions Type</option>
+                    <option value="int_add_sub">Addition/Subtraction of Integers</option>
+                    <option value="sim_add_sub">Simple Addition/Subtraction</option>
+                    <!-- <option value="rational_add_sub">Addition/Subtraction of Rationals</option> -->
+                    <option value="int_mul">Multiplication of Integers</option>
+                    <option value="sim_mul">Simple Multiplication</option>
+                    <option value="int_div">Division of Integers</option>
+                    <option value="sim_div">Simple Division</option>
+                    <!-- <option value="rational_mul">Multiplication of Rationals</option>
+                    <option value="rational_div">Division of Rationals</option> -->
                 </select>
             </div>
         </div>
     </div>
 
-    <script src="scripts/main_page.js"></script>
+    <script src="./scripts/main_page.js"></script>
 </body>
 </html>

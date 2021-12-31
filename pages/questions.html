@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Drills</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="questions_main">
-        <div class="questions_main_container">
-            <div class="questions_main_content">
-                <h1 id="prompt">Enter question amount</h1>
-                <input type="text" name="answer_box" id="answer_box" placeholder="Enter answer here"><br><br>
-                <p id='submit_hint'>Press Enter to submit answer</p><br>
-                <a id="restart" href="index.html" hidden>Start Again</a>
-                <p id="error_prompt" hidden>The question amount should be between 1-150</p>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Math Drills</title>
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <body>
+        <div class="questions_main">
+            <div class="questions_main_container">
+                <div class="questions_main_content">
+                    <h1 id="prompt">Enter question amount</h1>
+                    <input class="text_input" id="answer_box" type="text" name="answer_box" placeholder="Enter answer here">
+                    <br>
+                    <br>
+                    <p id="submit_hint">Press Enter to submit answer</p>
+                    <br>
+                    <a id="restart" href="index.html" hidden="">Start Again</a>
+                    <p id="error_prompt" hidden="">The question amount should be between 1-150</p>
+                    <br>
+                    <br>
+                    <br>
+                    <p id="user_select_prompt">Select user to track performance</p>
+                    <select class="drop_down" id="user_select" name="user_select">
+                        <option selected value="guest">Guest</option>
+                    </select>
+                    <div class="user_interact_container">
+                        <button class="interact_user_buttons" id="view_stats" onclick="view_stats()">View Stats</button>
+                        <button class="interact_user_buttons" id="add_user" onclick="show_user_input()">Add User</button>
+                    </div>
+                    <input class="text_input" id="user_in" type="text" name="user_name" placeholder="Enter user name" hidden>
+                    <p class="user_prompt" id="user_success_prompt" hidden>User successfully added. Reloading...</p>
+                    <p class="user_prompt" id="user_error_prompt" hidden>The user already exists.</p>
+                    <p id="previous_performance_text" hidden>No previous performance recorded.</p>
+                    <ul id="performance_list"></ul>
+                </div>
             </div>
         </div>
-    </div>
-
-    <script src="scripts/questions.js"></script>
-</body>
+    </body>
+    <script src="./scripts/questions.js"></script>
 </html>
