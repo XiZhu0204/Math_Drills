@@ -4,7 +4,7 @@ const user_performance = require('../models/user_performance');
 
 // gets performance by name
 router.get('/:name', (req, res) => {
-    user_performance.find({name: `${req.params.name}`}, 'performance -_id', (err, result) => {
+    user_performance.find({user_name: `${req.params.name}`}, 'performance -_id', (err, result) => {
         if (err) {
             res.status(500).send(`Error occurred: ${err}`);
         }
@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
     const question_type = req.body.question_type;
     const average_time = req.body.average_time;
     // get the performance object and update corresponding field
-    user_performance.find({name: user_name}, 'performance -_id', (err, result) => {
+    user_performance.find({user_name: user_name}, 'performance -_id', (err, result) => {
         if (err) {
             res.status(500).json({'Error': err});
         }
@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
         }
 
         performance_collection[question_type] = question_type_time;
-        user_performance.findOneAndUpdate({name: `${user_name}`}, {performance: performance_collection}, (err, result) => {
+        user_performance.findOneAndUpdate({user_name: `${user_name}`}, {performance: performance_collection}, (err, result) => {
             if (err) {
                 res.status(500).json({'Error': err});
             }
