@@ -58,15 +58,16 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
             }
         } else {
             // Future reference: The regex to detect fractions separated by '/' is: /^\d+\/\d+$/
-            if (/^\d+$/.test(value) === true) {
+            if (/^-?\d+$/.test(value) === true) {
                 let answer = parseInt(value);
                 if (answer === questions[questions_index][current_question]) {
                     questions_index++;
                     current_question = Object.keys(questions[questions_index])[0];
                     document.getElementById('prompt').innerHTML = current_question;
                 } else {
+                    document.getElementById('answer_box').value = '';
                     // use loop and changing background colour to achieve blinking effect when wrong
-                    for (var i = 0; i < 3; i++) {
+                    for (let i = 0; i < 3; i++) {
                         document.getElementById('answer_box').style.backgroundColor = '#FF1A1A';
                         await delay(100);
                         document.getElementById('answer_box').style.backgroundColor = '#FFFFFF';
@@ -74,6 +75,7 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
                     }
                 }
             } else {
+                document.getElementById('answer_box').value = '';
                 await show_ele(1500, 'error_prompt');
             }
             if (questions_index === questions_amount) {
