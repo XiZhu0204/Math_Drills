@@ -21,11 +21,13 @@ window.onload = () => {
 // The following enter presses reads the input for answers to questions
 // If correct, move to next question
 let questions_amount = 0;
-let questions = [];
 let questions_index = 0;
 let current_question = "";
 let questions_start_time = 0;
 let user_name = null;
+
+let question = "";
+let solution = null;
 
 document.getElementById('answer_box').addEventListener('keydown', async ({key}) => {
     if (key === "Enter") {
@@ -33,12 +35,10 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
         if (!questions_amount) {
             if ((/^\d+$/.test(value) === true) && parseInt(value) > 0 && parseInt(value) < 150) {
                 questions_amount = parseInt(value);
-                while (Object.keys(questions).length <= questions_amount) {
-                    let [question, solution] = questions_gen_map[question_type]();
-                    questions.push({[question]: solution});
-                }
-                current_question = Object.keys(questions[questions_index])[0];
-                document.getElementById('prompt').innerHTML = current_question;
+
+                [question, solution] = questions_gen_map[question_type]();
+                // document.getElementById('prompt').style.fontFamily = "monospace";
+                document.getElementById('prompt').innerHTML = question;
 
                 // get user name from drop down
                 user_name = document.getElementById('user_select').value;
@@ -60,10 +60,10 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
             // Future reference: The regex to detect fractions separated by '/' is: /^\d+\/\d+$/
             if (/^-?\d+$/.test(value) === true) {
                 let answer = parseInt(value);
-                if (answer === questions[questions_index][current_question]) {
+                if (answer === solution) {
                     questions_index++;
-                    current_question = Object.keys(questions[questions_index])[0];
-                    document.getElementById('prompt').innerHTML = current_question;
+                    [question, solution] = questions_gen_map[question_type]();
+                    document.getElementById('prompt').innerHTML = question;
                 } else {
                     document.getElementById('answer_box').value = '';
                     // use loop and changing background colour to achieve blinking effect when wrong
@@ -78,10 +78,11 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
                 document.getElementById('answer_box').value = '';
                 await show_ele(1500, 'error_prompt');
             }
-            if (questions_index === questions_amount) {
+            if (questions_index === questions_amount){
                 end();
-                return
+                return;
             }
+            
         }
         document.getElementById('answer_box').value = '';
     }
@@ -105,6 +106,7 @@ function end() {
     document.getElementById('answer_box').hidden = true;
     document.getElementById('submit_hint').innerHTML = `An average ${average_time_per_question} seconds was spent on each question on this attempt.`;
     document.getElementById('restart').hidden = false;
+    // document.getElementById('prompt').style.fontFamily = "Helvetica, sans-serif";
     if (!user_name || user_name === 'guest') {
         return;
     }
