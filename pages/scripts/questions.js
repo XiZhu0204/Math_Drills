@@ -1,3 +1,4 @@
+import { Rationals } from "./rationals";
 const question_type = new URLSearchParams(window.location.search).get('question_type');
 
 // populate user select on load
@@ -37,7 +38,6 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
                 questions_amount = parseInt(value);
 
                 [question, solution] = questions_gen_map[question_type]();
-                // document.getElementById('prompt').style.fontFamily = "monospace";
                 document.getElementById('prompt').innerHTML = question;
 
                 // get user name from drop down
@@ -50,17 +50,23 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
                 document.getElementById('user_in').hidden = true;
 
                 questions_start_time = performance.now();
-
+                
+                document.getElementById('submit_hint').innerHTML = "Press Enter to submit answer<br><br>Enter fractions by separating the numbers with /"
                 // change error prompt now that a valid question amount has been accepted
                 document.getElementById('error_prompt').innerHTML = "Please enter a valid number."
             } else {
                 await show_ele(1500, 'error_prompt');
             }
         } else {
-            // Future reference: The regex to detect fractions separated by '/' is: /^\d+\/\d+$/
-            if (/^-?\d+$/.test(value) === true) {
-                let answer = parseInt(value);
-                if (answer === solution) {
+            // The regex tests for either integers or '/' separated fractions
+            if (/^-?\d+$|^-?\d+\/\d+$/.test(value)) {
+                let answer = null;
+                if (value.includes("/")) {
+                    answer = new Rationals(parseInt(value.split("/")[0]), parseInt(value.split("/")[1]));
+                } else {
+                    answer = new Rationals(parseInt(value), 1);
+                }
+                if (answer.equals(solution)) {
                     questions_index++;
                     [question, solution] = questions_gen_map[question_type]();
                     document.getElementById('prompt').innerHTML = question;
@@ -189,59 +195,84 @@ document.getElementById('user_in').addEventListener('keydown', ({key}) => {
 
 // Question generation functions
 const questions_gen_map = {
+    // all integers will be represented as rational numbers to avoid having to make extra functions to handle cases
     "int_add_sub": () => {
-        let num_1 = generate_num_by_max_limit(99); // use ceil to avoid x + 0 or x - 0 type questions
-        let num_2 = generate_num_by_max_limit(99);
-        return prepare_add_sub(num_1, num_2);
+        let num_1 = new Rationals(generate_num_by_max_limit(99), 1); // use ceil to avoid x + 0 or x - 0 type questions
+        let num_2 = new Rationals(generate_num_by_max_limit(99), 1);
+        return prepare_add_sub(num_1, num_2, true);
     },
     "sim_add_sub": () => {
-        let num_1 = generate_num_by_max_limit(10);
-        let num_2 = generate_num_by_max_limit(10);
-        return prepare_add_sub(num_1, num_2);
+        let num_1 = new Rationals(generate_num_by_max_limit(10), 1);
+        let num_2 = new Rationals(generate_num_by_max_limit(10), 1);
+        return prepare_add_sub(num_1, num_2, false);
+    },
+    "rational_add_sub": () => {
+        let num_1 = generate_random_rational();
+        let num_2 = generate_random_rational();
+        return prepare_add_sub(num_1, num_2, true);
     },
     "int_mul": () => {
-        let num_1 = generate_num_by_max_limit(99); // limit multiplication to 12 for now
-        let num_2 = generate_num_by_max_limit(99);
+        let num_1 = new Rationals(generate_num_by_max_limit(99), 1); // limit multiplication to 12 for now
+        let num_2 = new Rationals(generate_num_by_max_limit(99), 1);
         return prepare_mul(num_1, num_2);
     },
     "sim_mul": () => {
-        let num_1 = generate_num_by_max_limit(12); // limit multiplication to 12 for now
-        let num_2 = generate_num_by_max_limit(12);
+        let num_1 = new Rationals(generate_num_by_max_limit(12), 1); // limit multiplication to 12 for now
+        let num_2 = new Rationals(generate_num_by_max_limit(12), 1);
+        return prepare_mul(num_1, num_2);
+    },
+    "rational_mul": () => {
+        let num_1 = generate_random_rational();
+        let num_2 = generate_random_rational();
         return prepare_mul(num_1, num_2);
     },
     "int_div": () => {
-        let num_1 = generate_num_by_max_limit(12); // ensure the divsor is single digit to avoid difficult divisions
-        let num_2 = generate_num_by_max_limit(99);
+        let num_1 = new Rationals(generate_num_by_max_limit(12), 1); // ensure the divsor is single digit to avoid difficult divisions
+        let num_2 = new Rationals(generate_num_by_max_limit(99), 1);
         return prepare_div(num_1, num_2);
     },
     "sim_div": () => {
-        let num_1 = generate_num_by_max_limit(12); // ensure the divsor is single digit to avoid difficult divisions
-        let num_2 = generate_num_by_max_limit(12);
+        let num_1 = new Rationals(generate_num_by_max_limit(12), 1); // ensure the divsor is single digit to avoid difficult divisions
+        let num_2 = new Rationals(generate_num_by_max_limit(12), 1);
+        return prepare_div(num_1, num_2);
+    },
+    "rational_div": () => {
+        let num_1 = generate_random_rational();
+        let num_2 = generate_random_rational();
         return prepare_div(num_1, num_2);
     }
 }
 
 function generate_num_by_max_limit(max_num) {
-    return Math.ceil(Math.random() * max_num)
+    return Math.ceil(Math.random() * max_num);
 }
 
-function prepare_add_sub(num_1, num_2) {
+function generate_random_rational() {
+    // cap numerator/denominators to 12 to avoid difficult questions
+    return new Rationals(Math.ceil(Math.random() * 12), Math.ceil(Math.random() * 12));
+}
+
+function prepare_add_sub(num_1, num_2, allow_negatives) {
     let addition = (Math.floor(Math.random() * 2) === 0);
     if (addition) {
-        return [`${num_1} + ${num_2}`, (num_1 + num_2)];
+        return [`${num_1} + ${num_2}`, num_1.add(num_2)];
     } else {
-        // ensure the difference is positive
-        let minuend = Math.max(num_1, num_2);
-        let subtrahend = Math.min(num_1, num_2);
-        return [`${minuend} - ${subtrahend}`, (minuend - subtrahend)];
+        if (allow_negatives) {
+            return [`${num_1} - ${num_2}`, num_1.sub(num_2)];
+        } else {
+            // ensure the difference is positive
+            let minuend = Rationals.max(num_1, num_2);
+            let subtrahend = Rationals.min(num_1, num_2);
+            return [`${minuend} - ${subtrahend}`, minuend.sub(subtrahend)];
+        }
     }
 }
 
 function prepare_mul(num_1, num_2) {
-    return [`${num_1} x ${num_2}`, (num_1*num_2)];
+    return [`${num_1} x ${num_2}`, num_1.mul(num_2)];
 }
 
 function prepare_div(num_1, num_2) {
-    let product = num_1*num_2;
-    return [`${product} ÷ ${num_1}`, (product/num_1)];
+    let product = num_1.mul(num_2);
+    return [`${product} ÷ ${num_1}`, num_2];
 }
