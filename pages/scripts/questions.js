@@ -51,7 +51,24 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
 
                 questions_start_time = performance.now();
                 
-                document.getElementById('submit_hint').innerHTML = "Press Enter to submit answer<br><br>Enter fractions by separating the numbers with /"
+                const fractions_required_map = {
+                    // all integers will be represented as rational numbers to avoid having to make extra functions to handle cases
+                    "int_add_sub": false,
+                    "sim_add_sub": false,
+                    "rational_add_sub": true,
+                    "int_mul": false,
+                    "sim_mul": false,
+                    "rational_mul": true,
+                    "int_div": false,
+                    "sim_div": false,
+                    "rational_div": true
+                }
+
+                if (fractions_required_map[question_type]) {
+                    // fractional responses expected, update prompt
+                    document.getElementById('submit_hint').innerHTML = 
+                    "Press Enter to submit answer<br><br>Enter fractions by separating the numbers with /<br><br>Fractions must be reduced to simplist form";
+                }
                 // change error prompt now that a valid question amount has been accepted
                 document.getElementById('error_prompt').innerHTML = "Please enter a valid number."
             } else {
@@ -66,7 +83,8 @@ document.getElementById('answer_box').addEventListener('keydown', async ({key}) 
                 } else {
                     answer = new Rationals(parseInt(value), 1);
                 }
-                if (answer.equals(solution)) {
+                if (answer.equals(solution) && answer.gcd === 1) {
+                    // ensure answer is in simplist form
                     questions_index++;
                     [question, solution] = questions_gen_map[question_type]();
                     document.getElementById('prompt').innerHTML = question;
