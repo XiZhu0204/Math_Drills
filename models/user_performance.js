@@ -1,25 +1,32 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-let user_performance_schema = mongoose.Schema({
+const Performance = {
+  avg_time: Number,
+  date: String,
+};
+
+const user_performance_schema = mongoose.Schema(
+  {
     user_name: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     performance: {
-        int_add_sub: [Number],
-        sim_add_sub: [Number],
-        rational_add_sub: [Number],
-        int_mul: [Number],
-        sim_mul: [Number],
-        int_div: [Number],
-        sim_div: [Number],
-        rational_mul: [Number],
-        rational_div: [Number],
+      int_add_sub: [Performance],
+      sim_add_sub: [Performance],
+      rational_add_sub: [Performance],
+      int_mul: [Performance],
+      sim_mul: [Performance],
+      int_div: [Performance],
+      sim_div: [Performance],
+      rational_mul: [Performance],
+      rational_div: [Performance],
     },
-},
-{
-    versionKey: false
-})
+  },
+  {
+    versionKey: false,
+  }
+);
 
-module.exports = mongoose.model('user_performance', user_performance_schema);
+module.exports = mongoose.model("user_performance", user_performance_schema);
