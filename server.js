@@ -12,7 +12,6 @@ mongoose.connect(
     {useNewUrlParser: true, useUnifiedTopology: true},
     () => console.log("Connected to DB")
 );
-const user_performance = require('./models/user_performance');
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'pages'), {extensions: ['html', "js"]}));
