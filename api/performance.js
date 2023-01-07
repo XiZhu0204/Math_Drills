@@ -27,7 +27,6 @@ router.post("/", (req, res) => {
   const average_time = req.body.average_time;
 
   const today = moment().format('MMMM Do YYYY');
-  console.log(today)
 
   // get the performance object and update corresponding field
   user_performance.find(
