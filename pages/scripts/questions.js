@@ -36,7 +36,8 @@ let solution = null;
 document
   .getElementById("answer_box")
   .addEventListener("keydown", async (e) => {
-    document.getElementById("submit_hint").innerHTML = `Key: ${e.key} Code: ${e.keyCode}`;
+    let str = document.getElementById("answer_box").value;
+    document.getElementById("submit_hint").innerHTML = `Key: ${e.key} Code: ${str.charCodeAt(str.length)}`;
     if (e.key === "Enter") {
       e.preventDefault();
       console.log("Code:", e.code);
