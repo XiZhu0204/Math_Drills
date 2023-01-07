@@ -33,6 +33,8 @@ let user_name = null;
 let question = "";
 let solution = null;
 
+let refocus = true;
+
 document
   .getElementById("answer_box")
   .addEventListener("keydown", async ({ key }) => {
@@ -57,13 +59,18 @@ async function show_ele(show_time, ele_name) {
 
 async function blur_handler() {
   await handle_input();
-  document.getElementById("answer_box").focus();
+  if (refocus) {
+    document.getElementById("answer_box").focus();
+  }
 }
 
 async function handle_input() {
   let value = document.getElementById("answer_box").value;
   if (value === "") {
+    refocus = false;
     return;
+  } else {
+    refocus = true;
   }
 
   if (!questions_amount) {
