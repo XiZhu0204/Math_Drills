@@ -37,13 +37,13 @@ document
   .getElementById("answer_box")
   .addEventListener("keydown", async ({ key }) => {
     if (key === "Enter") {
-      await handle_input();
+      document.getElementById("answer_box").blur();
     }
   });
 
 document
-.getElementById("answer_box")
-.addEventListener("blur", handle_input);
+  .getElementById("answer_box")
+  .addEventListener("blur", blur_handler);
 
 async function delay(time) {
   await new Promise((res) => setTimeout(res, time));
@@ -55,12 +55,17 @@ async function show_ele(show_time, ele_name) {
   document.getElementById(`${ele_name}`).hidden = true;
 }
 
+async function blur_handler() {
+  await handle_input();
+  document.getElementById("answer_box").focus();
+}
+
 async function handle_input() {
   let value = document.getElementById("answer_box").value;
   if (value === "") {
     return;
   }
-  
+
   if (!questions_amount) {
     if (
       /^\d+$/.test(value) === true &&
