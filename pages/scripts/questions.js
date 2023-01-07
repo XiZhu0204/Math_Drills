@@ -43,11 +43,7 @@ document
 
   document
   .getElementById("answer_box")
-  .addEventListener("blur", blurFunc);
-
-function blurFunc() {
-  document.getElementById("submit_hint").innerHTML = "Blurred";
-}
+  .addEventListener("blur", handle_input);
 
 async function delay(time) {
   await new Promise((res) => setTimeout(res, time));
