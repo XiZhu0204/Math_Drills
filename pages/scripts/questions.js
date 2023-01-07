@@ -36,10 +36,11 @@ let solution = null;
 document
   .getElementById("answer_box")
   .addEventListener("keydown", async (e) => {
+    document.getElementById("submit_hint").innerHTML = `Key: ${e.key}`;
     if (e.key === "Enter") {
       e.preventDefault();
       console.log("Code:", e.code);
-      document.getElementById("submit_hint").innerHTML = `Key: ${e.key}`;
+      
       let value = document.getElementById("answer_box").value;
       if (!questions_amount) {
         if (
