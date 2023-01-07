@@ -35,101 +35,15 @@ let solution = null;
 
 document
   .getElementById("answer_box")
-  .addEventListener("keydown", async (e) => {
-    let str = document.getElementById("answer_box").value;
-    document.getElementById("submit_hint").innerHTML = `Key: ${e.key} Code: ${str.charCodeAt(str.length)}`;
-    if (e.key === "Enter") {
-      e.preventDefault();
-      console.log("Code:", e.code);
-      
-      let value = document.getElementById("answer_box").value;
-      if (!questions_amount) {
-        if (
-          /^\d+$/.test(value) === true &&
-          parseInt(value) > 0 &&
-          parseInt(value) < 150
-        ) {
-          questions_amount = parseInt(value);
-
-          [question, solution] = questions_gen_map[question_type]();
-          document.getElementById("prompt").innerHTML = question;
-
-          // get user name from drop down
-          user_name = document.getElementById("user_select").value;
-          // hide the user elements
-          document.getElementById("user_select_prompt").hidden = true;
-          document.getElementById("user_select").hidden = true;
-          document.getElementById("add_user").hidden = true;
-          document.getElementById("view_stats").hidden = true;
-          document.getElementById("user_in").hidden = true;
-
-          questions_start_time = performance.now();
-
-          const fractions_required_map = {
-            // all integers will be represented as rational numbers to avoid having to make extra functions to handle cases
-            int_add_sub: false,
-            sim_add_sub: false,
-            rational_add_sub: true,
-            int_mul: false,
-            sim_mul: false,
-            rational_mul: true,
-            int_div: false,
-            sim_div: false,
-            rational_div: true,
-          };
-
-          if (fractions_required_map[question_type]) {
-            // fractional responses expected, update prompt
-            document.getElementById("submit_hint").innerHTML =
-              "Press Enter to submit answer<br><br>Enter fractions by separating the numbers with /<br><br>Fractions must be reduced to simplist form";
-          }
-          // change error prompt now that a valid question amount has been accepted
-          document.getElementById("error_prompt").innerHTML =
-            "Please enter a valid number.";
-        } else {
-          await show_ele(1500, "error_prompt");
-        }
-      } else {
-        // The regex tests for either integers or '/' separated fractions
-        if (/^-?\d+$|^-?\d+\/\d+$/.test(value)) {
-          let answer = null;
-          if (value.includes("/")) {
-            answer = new Rationals(
-              parseInt(value.split("/")[0]),
-              parseInt(value.split("/")[1])
-            );
-          } else {
-            answer = new Rationals(parseInt(value), 1);
-          }
-          if (answer.equals(solution) && answer.gcd === 1) {
-            // ensure answer is in simplist form
-            questions_index++;
-            [question, solution] = questions_gen_map[question_type]();
-            document.getElementById("prompt").innerHTML = question;
-          } else {
-            document.getElementById("answer_box").value = "";
-            // use loop and changing background colour to achieve blinking effect when wrong
-            for (let i = 0; i < 3; i++) {
-              document.getElementById("answer_box").style.backgroundColor =
-                "#FF1A1A";
-              await delay(100);
-              document.getElementById("answer_box").style.backgroundColor =
-                "#FFFFFF";
-              await delay(100);
-            }
-          }
-        } else {
-          document.getElementById("answer_box").value = "";
-          await show_ele(1500, "error_prompt");
-        }
-        if (questions_index === questions_amount) {
-          end();
-          return;
-        }
-      }
-      document.getElementById("answer_box").value = "";
+  .addEventListener("keydown", async ({ key }) => {
+    if (key === "Enter") {
+      await handle_input();
     }
   });
+
+function blurFunc() {
+  document.getElementById("submit_hint").innerHTML = "Blurred";
+}
 
 async function delay(time) {
   await new Promise((res) => setTimeout(res, time));
@@ -139,6 +53,95 @@ async function show_ele(show_time, ele_name) {
   document.getElementById(`${ele_name}`).hidden = false;
   await delay(show_time);
   document.getElementById(`${ele_name}`).hidden = true;
+}
+
+async function handle_input() {
+  let value = document.getElementById("answer_box").value;
+  if (!questions_amount) {
+    if (
+      /^\d+$/.test(value) === true &&
+      parseInt(value) > 0 &&
+      parseInt(value) < 150
+    ) {
+      questions_amount = parseInt(value);
+
+      [question, solution] = questions_gen_map[question_type]();
+      document.getElementById("prompt").innerHTML = question;
+
+      // get user name from drop down
+      user_name = document.getElementById("user_select").value;
+      // hide the user elements
+      document.getElementById("user_select_prompt").hidden = true;
+      document.getElementById("user_select").hidden = true;
+      document.getElementById("add_user").hidden = true;
+      document.getElementById("view_stats").hidden = true;
+      document.getElementById("user_in").hidden = true;
+
+      questions_start_time = performance.now();
+
+      const fractions_required_map = {
+        // all integers will be represented as rational numbers to avoid having to make extra functions to handle cases
+        int_add_sub: false,
+        sim_add_sub: false,
+        rational_add_sub: true,
+        int_mul: false,
+        sim_mul: false,
+        rational_mul: true,
+        int_div: false,
+        sim_div: false,
+        rational_div: true,
+      };
+
+      if (fractions_required_map[question_type]) {
+        // fractional responses expected, update prompt
+        document.getElementById("submit_hint").innerHTML =
+          "Press Enter to submit answer<br><br>Enter fractions by separating the numbers with /<br><br>Fractions must be reduced to simplist form";
+      }
+      // change error prompt now that a valid question amount has been accepted
+      document.getElementById("error_prompt").innerHTML =
+        "Please enter a valid number.";
+    } else {
+      await show_ele(1500, "error_prompt");
+    }
+  } else {
+    // The regex tests for either integers or '/' separated fractions
+    if (/^-?\d+$|^-?\d+\/\d+$/.test(value)) {
+      let answer = null;
+      if (value.includes("/")) {
+        answer = new Rationals(
+          parseInt(value.split("/")[0]),
+          parseInt(value.split("/")[1])
+        );
+      } else {
+        answer = new Rationals(parseInt(value), 1);
+      }
+      if (answer.equals(solution) && answer.gcd === 1) {
+        // ensure answer is in simplist form
+        questions_index++;
+        [question, solution] = questions_gen_map[question_type]();
+        document.getElementById("prompt").innerHTML = question;
+      } else {
+        document.getElementById("answer_box").value = "";
+        // use loop and changing background colour to achieve blinking effect when wrong
+        for (let i = 0; i < 3; i++) {
+          document.getElementById("answer_box").style.backgroundColor =
+            "#FF1A1A";
+          await delay(100);
+          document.getElementById("answer_box").style.backgroundColor =
+            "#FFFFFF";
+          await delay(100);
+        }
+      }
+    } else {
+      document.getElementById("answer_box").value = "";
+      await show_ele(1500, "error_prompt");
+    }
+    if (questions_index === questions_amount) {
+      end();
+      return;
+    }
+  }
+  document.getElementById("answer_box").value = "";
 }
 
 function end() {
