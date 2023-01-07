@@ -41,9 +41,9 @@ document
     }
   });
 
-  document
-  .getElementById("answer_box")
-  .addEventListener("blur", handle_input);
+document
+.getElementById("answer_box")
+.addEventListener("blur", handle_input);
 
 async function delay(time) {
   await new Promise((res) => setTimeout(res, time));
@@ -57,6 +57,10 @@ async function show_ele(show_time, ele_name) {
 
 async function handle_input() {
   let value = document.getElementById("answer_box").value;
+  if (value === "") {
+    return;
+  }
+  
   if (!questions_amount) {
     if (
       /^\d+$/.test(value) === true &&
