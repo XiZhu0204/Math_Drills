@@ -41,6 +41,10 @@ document
     }
   });
 
+  document
+  .getElementById("answer_box")
+  .addEventListener("blur", blurFunc);
+
 function blurFunc() {
   document.getElementById("submit_hint").innerHTML = "Blurred";
 }
