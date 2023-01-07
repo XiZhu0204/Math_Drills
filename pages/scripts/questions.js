@@ -36,7 +36,7 @@ let solution = null;
 document
   .getElementById("answer_box")
   .addEventListener("keydown", async (e) => {
-    if (key === "Enter") {
+    if (e.key === "Enter") {
       e.preventDefault();
       let value = document.getElementById("answer_box").value;
       if (!questions_amount) {
