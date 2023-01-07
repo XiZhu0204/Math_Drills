@@ -30,7 +30,6 @@ document.getElementById("user_in").addEventListener("keydown", ({ key }) => {
       body: `user_name=${document.getElementById("user_in").value}`,
     })
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           show_ele(1000, "user_success_prompt");
           location.reload();
